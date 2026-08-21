@@ -1,0 +1,284 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String             @id @default(cuid())
+  name             String
+  email            String             @unique
+  password         String
+  department       String
+  semester         Int
+  currentCgpa      Float
+  createdAt        DateTime           @default(now())
+  academicGoals    AcademicGoal[]
+  academicTasks    AcademicTask[]
+  budgets          Budget[]
+  courses          Course[]
+  expenses         Expense[]
+  JobAlert         JobAlert[]
+  JobPreference    JobPreference?
+  SavedJob         SavedJob[]
+  SavedScholarship SavedScholarship[]
+  ScholarshipAlert ScholarshipAlert[]
+  resources        Resource[]
+  lostFoundItems   LostFoundItem[]
+}
+
+model AcademicGoal {
+  id               String            @id @default(cuid())
+  userId           String
+  semesterNumber   Int
+  currentCgpa      Float
+  completedCredits Int
+  targetCgpa       Float
+  upcomingCredits  Int
+  requiredGpa      Float
+  isPossible       Boolean
+  createdAt        DateTime          @default(now())
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  simulatedCourses SimulatedCourse[]
+}
+
+model SimulatedCourse {
+  id             String       @id @default(cuid())
+  academicGoalId String
+  name           String
+  credits        Float
+  targetGrade    String
+  academicGoal   AcademicGoal @relation(fields: [academicGoalId], references: [id], onDelete: Cascade)
+}
+
+model Course {
+  id              String             @id @default(cuid())
+  userId          String
+  code            String
+  title           String
+  section         String
+  credits         Float              @default(3.0)
+  semesterNumber  Int                @default(1)
+  classDays       String             @default("SUN, TUE")
+  startTime       String             @default("09:30 AM")
+  endTime         String             @default("10:45 AM")
+  grade           String?
+  totalClasses    Int                @default(0)
+  attendedClasses Int                @default(0)
+  missedClasses   Int                @default(0)
+  createdAt       DateTime           @default(now())
+  attendanceLogs  AttendanceRecord[]
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AttendanceRecord {
+  id        String   @id @default(cuid())
+  courseId  String
+  date      DateTime @default(now())
+  status    String
+  createdAt DateTime @default(now())
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Budget {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Float
+  month     Int
+  year      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, month, year])
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  userId      String
+  amount      Float
+  category    String
+  description String?
+  date        DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AcademicTask {
+  id            String   @id @default(cuid())
+  userId        String
+  title         String
+  course        String?
+  type          String
+  dueAt         DateTime
+  reminderHours Int      @default(24)
+  notes         String?
+  isCompleted   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, dueAt])
+}
+
+model JobAlert {
+  id         String     @id
+  userId     String
+  jobId      String
+  matchScore Int
+  reason     String
+  isRead     Boolean    @default(false)
+  createdAt  DateTime   @default(now())
+  JobListing JobListing @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  User       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([userId, isRead])
+}
+
+model JobListing {
+  id              String     @id
+  source          String
+  externalId      String
+  url             String
+  title           String
+  company         String
+  companyLogo     String?
+  location        String     @default("Dhaka, Bangladesh")
+  isRemote        Boolean    @default(false)
+  jobType         String     @default("INTERNSHIP")
+  experienceLevel String     @default("ENTRY")
+  description     String
+  skills          String[]   @default([])
+  category        String     @default("GENERAL")
+  salaryText      String?
+  minCgpa         Float?
+  postedAt        DateTime   @default(now())
+  deadline        DateTime?
+  isActive        Boolean    @default(true)
+  fetchedAt       DateTime   @default(now())
+  createdAt       DateTime   @default(now())
+  JobAlert        JobAlert[]
+  SavedJob        SavedJob[]
+
+  @@unique([source, externalId])
+  @@index([category, jobType])
+  @@index([postedAt])
+}
+
+model JobPreference {
+  id                 String    @id
+  userId             String    @unique
+  keywords           String[]  @default([])
+  skills             String[]  @default([])
+  preferredLocations String[]  @default([])
+  jobTypes           String[]  @default(["INTERNSHIP"])
+  minMatchScore      Int       @default(50)
+  alertsEnabled      Boolean   @default(true)
+  lastSyncedAt       DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime
+  User               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SavedJob {
+  id         String     @id
+  userId     String
+  jobId      String
+  status     String     @default("SAVED")
+  notes      String?
+  appliedAt  DateTime?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime
+  JobListing JobListing @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  User       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([userId, status])
+}
+
+model SavedScholarship {
+  id            String      @id
+  userId        String
+  scholarshipId String
+  status        String      @default("SAVED")
+  reminderDays  Int         @default(3)
+  notes         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime
+  Scholarship   Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+  User          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scholarshipId])
+  @@index([userId, status])
+}
+
+model Scholarship {
+  id               String             @id
+  title            String
+  description      String
+  coverage         String
+  category         String
+  requirementCgpa  Float              @default(0.0)
+  department       String             @default("ALL")
+  deadline         DateTime
+  isActive         Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime
+  SavedScholarship SavedScholarship[]
+  ScholarshipAlert ScholarshipAlert[]
+}
+
+model ScholarshipAlert {
+  id            String      @id
+  userId        String
+  scholarshipId String
+  isRead        Boolean     @default(false)
+  matchScore    Int         @default(0)
+  matchReason   String
+  createdAt     DateTime    @default(now())
+  Scholarship   Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+  User          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scholarshipId])
+  @@index([userId, isRead])
+}
+
+model Resource {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  category    String   // "PDF", "ASSIGNMENT", "NOTES", "BOOK", "OTHER"
+  type        String   // "SALE", "RENT", "DONATION"
+  price       Float?   // Optional (nullable if donation)
+  contactInfo String
+  status      String   @default("AVAILABLE") // "AVAILABLE", "EXCHANGED"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model LostFoundItem {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  type        String   // "LOST" or "FOUND"
+  category    String   // "ELECTRONICS", "DOCUMENTS", "BOOKS_NOTES", "ACCESSORIES", "CLOTHING", "OTHER"
+  location    String
+  imageUrl    String?  // base64 formatted or path
+  contactInfo String
+  status      String   @default("ACTIVE") // "ACTIVE", "RESOLVED"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
