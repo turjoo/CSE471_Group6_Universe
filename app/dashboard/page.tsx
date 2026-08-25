@@ -148,6 +148,30 @@ export default function DashboardPage() {
         <div>
           <h2 className="text-lg font-bold text-gray-900 mb-4">Core Academic Tools</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {/* Feature Card: AI Study Assistant */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-bold mb-6 group-hover:bg-emerald-600 group-hover:text-white transition font-sans text-xl">
+                  🤖
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">AI Study Assistant</h3>
+                <p className="text-sm text-gray-500 font-medium leading-relaxed mb-6">
+                  Powered by Gemini. Ask academic questions, summarize long notes, and generate interactive flashcards instantly.
+                </p>
+              </div>
+
+              <Link
+                href="/study-assistant"
+                className="w-full bg-[#0f172a] hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-md mt-auto"
+              >
+                Open Study Assistant
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+
             
             {/* Feature Card 1: CGPA Calculator */}
             <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
@@ -245,6 +269,52 @@ export default function DashboardPage() {
               </Link>
             </div>
 
+            {/* Feature Card 4: Assignment & Quiz Scheduler */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-bold mb-6 group-hover:bg-blue-600 group-hover:text-white transition font-sans text-xl">
+                  📅
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Assignment & Quiz Scheduler</h3>
+                <p className="text-sm text-gray-500 font-medium leading-relaxed mb-6">
+                  A dedicated deadline tracker. Input upcoming assignments and quizzes, get live countdowns, and stay organized based on urgency levels.
+                </p>
+              </div>
+
+              <Link
+                href="/scheduler"
+                className="w-full bg-[#0f172a] hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-md mt-auto"
+              >
+                Open Scheduler
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Feature Card 5: ScholarPing */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center font-bold mb-6 group-hover:bg-purple-600 group-hover:text-white transition font-sans text-xl">
+                  🎓
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">ScholarPing</h3>
+                <p className="text-sm text-gray-500 font-medium leading-relaxed mb-6">
+                  A smart notification hub that automatically matches you with internal scholarships and waivers based on your CGPA and Major.
+                </p>
+              </div>
+
+              <Link
+                href="/scholarping"
+                className="w-full bg-[#0f172a] hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-md mt-auto"
+              >
+                Open ScholarPing
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+
           </div>
         </div>
 
@@ -253,6 +323,29 @@ export default function DashboardPage() {
           <h2 className="text-lg font-bold text-gray-900 mb-4">Peer-to-Peer & Campus Life</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
+            {/* Feature Card: Campus Carpool Hub */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center font-bold mb-6 group-hover:bg-orange-600 group-hover:text-white transition font-sans text-xl">
+                  🚗
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Campus Carpool Hub</h3>
+                <p className="text-sm text-gray-500 font-medium leading-relaxed mb-6">
+                  Find students heading your way. Post a trip, request to join, and split the fare in real-time via live chat. Save money on every commute.
+                </p>
+              </div>
+
+              <Link
+                href="/carpool"
+                className="w-full bg-[#0f172a] hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-md"
+              >
+                Open Carpool Hub
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+
             {/* Feature Card: P2P Resource Exchange */}
             <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
               <div>

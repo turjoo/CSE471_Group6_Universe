@@ -20,7 +20,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (res.success) {
-      router.push('/cgpa-forecast');
+      router.push('/dashboard');
     } else {
       setError(res.message);
     }
