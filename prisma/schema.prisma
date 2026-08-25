@@ -28,6 +28,9 @@ model User {
   ScholarshipAlert ScholarshipAlert[]
   resources        Resource[]
   lostFoundItems   LostFoundItem[]
+  carpoolPosts     CarpoolPost[]
+  carpoolRequests  CarpoolRequest[]
+  chatMessages     ChatMessage[]
 }
 
 model AcademicGoal {
@@ -281,4 +284,51 @@ model LostFoundItem {
   updatedAt   DateTime @updatedAt
 
   @@index([userId])
+}
+
+model CarpoolPost {
+  id              String           @id @default(cuid())
+  authorId        String
+  origin          String
+  destination     String
+  departureTime   DateTime
+  transportMode   String           // "CNG", "RICKSHAW", "TAXI", "CAR"
+  estimatedFare   Float
+  status          String           @default("OPEN") // "OPEN", "MATCHED", "COMPLETED", "CANCELLED"
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  author          User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  requests        CarpoolRequest[]
+  messages        ChatMessage[]
+
+  @@index([authorId])
+  @@index([status])
+}
+
+model CarpoolRequest {
+  id              String           @id @default(cuid())
+  postId          String
+  userId          String
+  status          String           @default("PENDING") // "PENDING", "APPROVED", "REJECTED"
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  post            CarpoolPost      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+model ChatMessage {
+  id              String           @id @default(cuid())
+  content         String
+  postId          String
+  userId          String
+  createdAt       DateTime         @default(now())
+
+  post            CarpoolPost      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
 }
