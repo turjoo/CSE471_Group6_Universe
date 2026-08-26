@@ -31,6 +31,14 @@ model User {
   carpoolPosts     CarpoolPost[]
   carpoolRequests  CarpoolRequest[]
   chatMessages     ChatMessage[]
+  campusEvents     CampusEvent[]
+  eventRsvps       EventRsvp[]
+  hangouts         HangoutBroadcast[]
+  hangoutResponses HangoutResponse[]
+  hangoutMessages  HangoutMessage[]
+  raisedAlerts     CampusAlert[]
+  alertAcks        AlertAcknowledgement[]
+  sosRequests      SosRequest[]
 }
 
 model AcademicGoal {
@@ -331,4 +339,161 @@ model ChatMessage {
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([postId, createdAt])
+}
+
+
+// ===========================================================================
+// MODULE 3 — Campus Pulse, Emergency Alert System
+// ===========================================================================
+
+model CampusEvent {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  category    String   @default("SEMINAR")
+  clubName    String
+  venue       String
+  startsAt    DateTime
+  endsAt      DateTime
+  capacity    Int?
+  feeTaka     Float    @default(0)
+  contactInfo String?
+  isCancelled Boolean  @default(false)
+
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rsvps EventRsvp[]
+
+  @@index([startsAt])
+  @@index([category])
+}
+
+model EventRsvp {
+  id      String      @id @default(cuid())
+  eventId String
+  event   CampusEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  status    String   @default("GOING")
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, userId])
+  @@index([userId])
+}
+
+model HangoutBroadcast {
+  id          String  @id @default(cuid())
+  hostId      String
+  host        User    @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  activity    String  @default("OTHER")
+  title       String
+  note        String? @db.Text
+  location    String
+  spotsNeeded Int     @default(1)
+
+  startsAt  DateTime
+  expiresAt DateTime
+  status    String   @default("OPEN")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  responses HangoutResponse[]
+  messages  HangoutMessage[]
+
+  @@index([status, expiresAt])
+}
+
+model HangoutResponse {
+  id          String           @id @default(cuid())
+  broadcastId String
+  broadcast   HangoutBroadcast @relation(fields: [broadcastId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime         @default(now())
+
+  @@unique([broadcastId, userId])
+}
+
+model HangoutMessage {
+  id          String           @id @default(cuid())
+  broadcastId String
+  broadcast   HangoutBroadcast @relation(fields: [broadcastId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body        String           @db.Text
+  createdAt   DateTime         @default(now())
+
+  @@index([broadcastId, createdAt])
+}
+
+model EmergencyContact {
+  id         String  @id @default(cuid())
+  name       String
+  role       String
+  phone      String
+  category   String  @default("SECURITY")
+  building   String?
+  floor      String?
+  isNational Boolean @default(false)
+  priority   Int     @default(100)
+  isActive   Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  @@index([category, priority])
+}
+
+model CampusAlert {
+  id       String  @id @default(cuid())
+  title    String
+  message  String  @db.Text
+  severity String  @default("WARNING")
+  category String  @default("OTHER")
+  location String?
+
+  raisedById String
+  raisedBy   User   @relation(fields: [raisedById], references: [id], onDelete: Cascade)
+
+  isActive   Boolean   @default(true)
+  resolvedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  acknowledgements AlertAcknowledgement[]
+
+  @@index([isActive, createdAt])
+}
+
+model AlertAcknowledgement {
+  id      String      @id @default(cuid())
+  alertId String
+  alert   CampusAlert @relation(fields: [alertId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  isSafe    Boolean  @default(true)
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@unique([alertId, userId])
+}
+
+model SosRequest {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type     String  @default("SECURITY")
+  location String
+  note     String? @db.Text
+  status   String  @default("OPEN")
+
+  createdAt  DateTime  @default(now())
+  resolvedAt DateTime?
+
+  @@index([status, createdAt])
 }

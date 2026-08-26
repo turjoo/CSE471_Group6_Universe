@@ -77,7 +77,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 lg:p-10 font-sans text-gray-900 flex flex-col justify-between">
       <div className="max-w-7xl mx-auto w-full space-y-8">
-        
+
         {/* Navigation Bar */}
         <header className="flex justify-between items-center pb-6 border-b border-gray-200/60">
           <div className="flex items-center gap-3">
@@ -172,7 +172,7 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            
+
             {/* Feature Card 1: CGPA Calculator */}
             <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
               <div>
@@ -322,7 +322,7 @@ export default function DashboardPage() {
         <div>
           <h2 className="text-lg font-bold text-gray-900 mb-4">Peer-to-Peer & Campus Life</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
+
             {/* Feature Card: Campus Carpool Hub */}
             <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
               <div>
@@ -370,6 +370,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Feature Card: Campus Lost & Found */}
+            {/* Feature Card: Campus Lost & Found */}
             <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
               <div>
                 <div className="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center font-bold mb-6 group-hover:bg-rose-600 group-hover:text-white transition font-sans text-xl">
@@ -386,6 +387,75 @@ export default function DashboardPage() {
                 className="w-full bg-[#0f172a] hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-md"
               >
                 Open Lost & Found Portal
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Feature Card: Job & Internship Board */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center font-bold mb-6 group-hover:bg-cyan-600 group-hover:text-white transition font-sans text-xl">
+                  💼
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Job & Internship Board</h3>
+                <p className="text-sm text-gray-500 font-medium leading-relaxed mb-6">
+                  Discover curated internships and entry-level jobs matched to your CGPA and skills, aggregated from LinkedIn and BDJobs.
+                </p>
+              </div>
+
+              <Link
+                href="/jobs"
+                className="w-full bg-[#0f172a] hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-md"
+              >
+                Open Job Board
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Feature Card: Campus Pulse */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 bg-fuchsia-50 text-fuchsia-600 rounded-2xl flex items-center justify-center font-bold mb-6 group-hover:bg-fuchsia-600 group-hover:text-white transition font-sans text-xl">
+                  🎉
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Campus Pulse</h3>
+                <p className="text-sm text-gray-500 font-medium leading-relaxed mb-6">
+                  Discover club events and seminars, RSVP instantly, or broadcast a live hangout when you've got free time and want company.
+                </p>
+              </div>
+
+              <Link
+                href="/campus-pulse"
+                className="w-full bg-[#0f172a] hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-md"
+              >
+                Open Campus Pulse
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Feature Card: Emergency & Campus Alerts */}
+            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+              <div>
+                <div className="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center font-bold mb-6 group-hover:bg-red-600 group-hover:text-white transition font-sans text-xl">
+                  🚨
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Emergency & Campus Alerts</h3>
+                <p className="text-sm text-gray-500 font-medium leading-relaxed mb-6">
+                  Access emergency contacts instantly, receive campus-wide safety alerts, and send a one-tap SOS request when you need help.
+                </p>
+              </div>
+
+              <Link
+                href="/emergency"
+                className="w-full bg-[#0f172a] hover:bg-gray-800 text-white font-bold py-3.5 px-6 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-md"
+              >
+                Open Emergency Center
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
