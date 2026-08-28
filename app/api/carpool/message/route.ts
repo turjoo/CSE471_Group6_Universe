@@ -1,9 +1,7 @@
 import Pusher from 'pusher';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-
-const prisma = new PrismaClient();
 
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID!,
