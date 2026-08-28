@@ -137,22 +137,22 @@ model AcademicTask {
 }
 
 model JobAlert {
-  id         String     @id
+  id         String     @id @default(cuid())
   userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   jobId      String
+  job        JobListing @relation(fields: [jobId], references: [id], onDelete: Cascade)
   matchScore Int
   reason     String
   isRead     Boolean    @default(false)
   createdAt  DateTime   @default(now())
-  JobListing JobListing @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  User       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, jobId])
   @@index([userId, isRead])
 }
 
 model JobListing {
-  id              String     @id
+  id              String     @id @default(cuid())
   source          String
   externalId      String
   url             String
@@ -163,7 +163,7 @@ model JobListing {
   isRemote        Boolean    @default(false)
   jobType         String     @default("INTERNSHIP")
   experienceLevel String     @default("ENTRY")
-  description     String
+  description     String     @db.Text
   skills          String[]   @default([])
   category        String     @default("GENERAL")
   salaryText      String?
@@ -173,17 +173,19 @@ model JobListing {
   isActive        Boolean    @default(true)
   fetchedAt       DateTime   @default(now())
   createdAt       DateTime   @default(now())
-  JobAlert        JobAlert[]
-  SavedJob        SavedJob[]
+
+  savedBy         SavedJob[]
+  alerts          JobAlert[]
 
   @@unique([source, externalId])
-  @@index([category, jobType])
   @@index([postedAt])
+  @@index([category, jobType])
 }
 
 model JobPreference {
-  id                 String    @id
+  id                 String    @id @default(cuid())
   userId             String    @unique
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   keywords           String[]  @default([])
   skills             String[]  @default([])
   preferredLocations String[]  @default([])
@@ -192,26 +194,24 @@ model JobPreference {
   alertsEnabled      Boolean   @default(true)
   lastSyncedAt       DateTime?
   createdAt          DateTime  @default(now())
-  updatedAt          DateTime
-  User               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt          DateTime  @updatedAt
 }
 
 model SavedJob {
-  id         String     @id
-  userId     String
-  jobId      String
-  status     String     @default("SAVED")
-  notes      String?
-  appliedAt  DateTime?
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime
-  JobListing JobListing @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  User       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId     String
+  job       JobListing @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  status    String     @default("SAVED")
+  notes     String?
+  appliedAt DateTime?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@unique([userId, jobId])
   @@index([userId, status])
 }
-
 model SavedScholarship {
   id            String      @id
   userId        String
